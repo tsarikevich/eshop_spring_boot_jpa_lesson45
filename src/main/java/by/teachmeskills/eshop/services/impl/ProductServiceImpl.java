@@ -100,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
     public ModelAndView findAllProductsByRequest(String request, int page) {
             ModelMap modelMap = new ModelMap();
             List<Product> products = productRepository.getProductsForOnePage(request, page);
-            List<Integer> quantityProductsPages = productRepository.getQuantityAllProductsForPagination(request);
+            List<Integer> quantityProductsPages = productRepository.findAllProductsQuantityByRequest(request);
             List<Image> images = imageRepository.getPrimaryImagesByListProducts(products);
             modelMap.addAttribute(IMAGES_FROM_SEARCH.getValue(), images);
             modelMap.addAttribute(PRODUCTS_FROM_SEARCH.getValue(), products);

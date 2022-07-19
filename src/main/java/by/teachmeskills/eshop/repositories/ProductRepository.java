@@ -11,5 +11,5 @@ public interface ProductRepository {
 
     List<Product> getProductsForOnePage(String request, int page);
 
-    List<Integer> getQuantityAllProductsForPagination(String request);
+    List<Integer> findAllProductsQuantityByRequest(String request);
 }

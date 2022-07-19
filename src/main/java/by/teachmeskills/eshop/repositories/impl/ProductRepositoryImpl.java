@@ -64,7 +64,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Integer> getQuantityAllProductsForPagination(String request) {
+    public List<Integer> findAllProductsQuantityByRequest(String request) {
         int quantityProducts = findQuantityAllProductsByRequest(request);
         int quantityPages;
         List<Integer> pages = new ArrayList<>();
