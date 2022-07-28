@@ -2,6 +2,7 @@ package by.teachmeskills.eshop.repositories.impl;
 
 import by.teachmeskills.eshop.entities.Category;
 import by.teachmeskills.eshop.repositories.CategoryRepository;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,12 +12,17 @@ import java.util.List;
 
 @Transactional
 @Repository
+@Log4j
 public class CategoryRepositoryImpl implements CategoryRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
     public Category create(Category entity) {
-        entityManager.persist(entity);
+        try {
+            entityManager.persist(entity);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return entity;
     }
 
@@ -31,5 +37,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     public void delete(int id) {
         entityManager.remove(entityManager.find(Category.class, id));
+    }
+
+    @Override
+    public Category findCategoryById(int id) {
+        return entityManager.find(Category.class, id);
     }
 }

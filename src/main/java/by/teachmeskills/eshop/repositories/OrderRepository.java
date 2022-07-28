@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OrderRepository {
     List<Order> getOrdersByUserId(int userId);
+
+    Order getOrderById(int id);
 }

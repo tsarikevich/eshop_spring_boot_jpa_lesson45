@@ -1,9 +1,12 @@
 package by.teachmeskills.eshop.entities;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,14 +31,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
+    @CsvBindByName
     @Column(name = "PRICE")
     private BigDecimal price;
     @Column(name = "DATE")
+    @CsvBindByName
     private LocalDateTime date;
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private User user;
-
+    @CsvBindByName
     @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyJoinColumn(name = "PRODUCT_ID")
     @Column(name = "QUANTITY", nullable = false)
@@ -65,5 +70,14 @@ public class Order extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), price, date);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "price=" + price +
+                ", date=" + date +
+                ", products=" + StringUtils.join(getProducts()) +
+                '}';
     }
 }

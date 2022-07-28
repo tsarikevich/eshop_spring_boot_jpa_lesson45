@@ -1,13 +1,16 @@
 package by.teachmeskills.eshop.entities;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,23 +21,28 @@ import java.util.Objects;
 
 @SuperBuilder
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
-    @Column(name = "NAME")
+    @CsvBindByName
+    @Column(name = "NAME", unique = true)
     private String name;
+    @CsvBindByName
     @Column(name = "DESCRIPTION", columnDefinition = "varchar(500)")
     private String description;
+    @CsvBindByName
     @Column(name = "PRICE")
     private BigDecimal price;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID", nullable = false)
+    @ToString.Exclude
     private Category category;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
     List<Image> images;
 
     @Override

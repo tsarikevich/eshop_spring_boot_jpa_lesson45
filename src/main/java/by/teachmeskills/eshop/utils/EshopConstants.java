@@ -13,11 +13,14 @@ public class EshopConstants {
     public static final String CATEGORY_ID = "categoryId";
     public static final String CATEGORY_NAME = "nameCategory";
     public static final String PRODUCT_ID = "productId";
+    public static final String ORDER_ID = "orderId";
     public static final String SEARCH = "search";
-    public static final String REDIRECT_TO_SEARCH_PAGE="redirect:/search";
+    public static final String FILE = "file";
+    public static final String REDIRECT_TO_SEARCH_PAGE = "redirect:/search";
     public static final String REDIRECT_TO_LOGIN_PAGE = "redirect:/login";
     public static final String REDIRECT_TO_CART_PAGE = "redirect:/cart";
     public static final String REDIRECT_TO_PRODUCT_PAGE = "redirect:/product";
     public static final String REDIRECT_TO_PROFILE_PAGE = "redirect:/profile";
-    public static final int QUANTITY_PRODUCTS_ON_PAGE=3;
+    public static final String REDIRECT_TO_HOME = "redirect:/home";
+    public static final int QUANTITY_PRODUCTS_ON_PAGE = 3;
 }

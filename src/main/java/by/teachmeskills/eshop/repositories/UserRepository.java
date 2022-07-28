@@ -7,4 +7,6 @@ public interface UserRepository {
     User getUserFromBaseByLoginAndPassword(User user);
 
     User getUserFromBaseByLogin(User user);
+
+    User getUserById(int id);
 }

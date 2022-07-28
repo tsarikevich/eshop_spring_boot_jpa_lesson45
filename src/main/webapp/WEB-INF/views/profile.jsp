@@ -43,6 +43,10 @@
                 <i class="fa fa-sign-out fa-lg" style="padding-right: 5px"></i> Выйти
             </button>
         </a>
+        <a style="text-decoration: none"
+           href="${contextPath}/profile/download">
+            <button><i class="fa fa-download fa-lg" style="padding-right: 5px"></i>Download CSV File</button>
+        </a>
     </div>
 </div>
 <c:if test="${not empty orders}">
@@ -70,9 +74,12 @@
                 </div>
             </c:forEach>
         </div>
+        <a style="text-decoration: none"
+           href="${contextPath}/profile/downloadOrder?orderId=${order.getId()}">
+            <button><i class="fa fa-download fa-lg" style="padding-right: 5px"></i>Download CSV File</button>
+        </a>
         <% orderCount++;%>
     </c:forEach>
-
 </c:if>
 </body>
 </html>

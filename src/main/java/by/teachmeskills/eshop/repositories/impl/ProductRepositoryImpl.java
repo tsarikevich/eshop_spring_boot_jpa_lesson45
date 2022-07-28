@@ -2,6 +2,7 @@ package by.teachmeskills.eshop.repositories.impl;
 
 import by.teachmeskills.eshop.entities.Product;
 import by.teachmeskills.eshop.repositories.ProductRepository;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static by.teachmeskills.eshop.utils.EshopConstants.QUANTITY_PRODUCTS_ON_PAGE;
 
+@Log4j
 @Transactional
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
@@ -20,7 +22,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     private EntityManager entityManager;
 
     public Product create(Product entity) {
-        entityManager.persist(entity);
+        try {
+            entityManager.persist(entity);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return entity;
     }
 
@@ -34,7 +40,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     public void delete(int id) {
-        entityManager.remove(entityManager.find(Product.class,id));
+        entityManager.remove(entityManager.find(Product.class, id));
     }
 
     @Override
