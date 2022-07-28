@@ -48,7 +48,15 @@
         </div>
         <br>
     </c:forEach>
-</div>
+        <form method="POST" enctype="multipart/form-data" action="${contextPath}/category/upload?categoryId=${categoryId}&nameCategory=${nameCategory}">
+            File to upload:
+            <input type="file" value="Select" name="file"><br/>
+            <button type="submit"><i class="fa fa-upload fa-lg">Upload CSV File</i></button>
+        </form>
+        <a style="text-decoration: none"
+           href="${contextPath}/category/download?categoryId=${categoryId}">
+            <button><i class="fa fa-download fa-lg" style="padding-right: 5px"></i>Download CSV File</button>
+        </a>
 </c:if>
 </div>
 </body>

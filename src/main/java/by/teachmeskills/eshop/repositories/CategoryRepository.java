@@ -1,5 +1,7 @@
 package by.teachmeskills.eshop.repositories;
 
-public interface CategoryRepository {
+import by.teachmeskills.eshop.entities.Category;
 
+public interface CategoryRepository {
+    Category findCategoryById(int id);
 }

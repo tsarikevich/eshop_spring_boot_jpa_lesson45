@@ -10,12 +10,20 @@ import by.teachmeskills.eshop.repositories.impl.CategoryRepositoryImpl;
 import by.teachmeskills.eshop.repositories.impl.ImageRepositoryImpl;
 import by.teachmeskills.eshop.repositories.impl.UserRepositoryImpl;
 import by.teachmeskills.eshop.services.UserService;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.Writer;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +42,7 @@ import static by.teachmeskills.eshop.utils.RequestParamsEnum.ORDER_PRODUCTS_IMAG
 import static by.teachmeskills.eshop.utils.RequestParamsEnum.USER_LOGIN;
 
 @Service
+@Log4j
 public class UserServiceImpl implements UserService {
     private final UserRepositoryImpl userRepository;
     private final CategoryRepositoryImpl categoryRepository;
@@ -74,8 +83,7 @@ public class UserServiceImpl implements UserService {
             populateError("login", modelAndView, bindingResult);
             populateError("password", modelAndView, bindingResult);
             modelAndView.setViewName(SIGN_IN_PAGE.getPath());
-        }
-        else if (Optional.ofNullable(user).isPresent()
+        } else if (Optional.ofNullable(user).isPresent()
                 && Optional.ofNullable(user.getLogin()).isPresent()
                 && Optional.ofNullable(user.getPassword()).isPresent()) {
             User loggedUser = userRepository.getUserFromBaseByLoginAndPassword(
@@ -111,7 +119,7 @@ public class UserServiceImpl implements UserService {
                 && Optional.ofNullable(user.getPassword()).isPresent()) {
             LocalDate birthDate = LocalDate.of(year, month, day);
             user.setBirthDate(birthDate);
-            if (isUserInBase(user)) {
+            if (checkExistUserInDB(user)) {
                 ModelMap modelMap = new ModelMap();
                 modelMap.addAttribute(CHECK_NEW_USER.getValue(), false);
                 modelMap.addAttribute(USER_LOGIN.getValue(), user);
@@ -145,7 +153,33 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private boolean isUserInBase(User user) {
+    @Override
+    public void writeProfileToCsv(User user, Writer writer) {
+        try {
+            User userFromDB = userRepository.getUserById(user.getId());
+            StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
+            beanToCsv.write(userFromDB);
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void writeOrderToCsv(int orderId, Writer writer) {
+        try {
+            Order order = orderRepository.getOrderById(orderId);
+            StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
+            beanToCsv.write(order);
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private boolean checkExistUserInDB(User user) {
         User userFromBase = userRepository.getUserFromBaseByLogin(user);
         return Optional.ofNullable(userFromBase).isPresent();
     }

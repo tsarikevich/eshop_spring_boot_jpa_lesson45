@@ -48,4 +48,9 @@ public class UserRepositoryImpl implements UserRepository {
         query.setParameter("login", user.getLogin());
         return (User) query.getSingleResult();
     }
+
+    @Override
+    public User getUserById(int id) {
+        return entityManager.find(User.class, id);
+    }
 }
